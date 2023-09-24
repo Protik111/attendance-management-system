@@ -1,0 +1,603 @@
+openapi: 3.0.0
+info:
+  version: '1'
+  title: 'Employee Attendance Management System'
+  description: 'This is a simple project where an employee will be able to do attendance. The main purpose of this project will be maintaining the employees’ attendances that includes daily attendance status, weekly status, salary report, etc.'
+  contact:
+    name: Rafiur Rahman Protik
+    url: https://protikdev.vercel.app/
+    email: rafiurprotik111@gmail.com
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/RAFIURPROTIK111/Employee-attendance-management-system/1
+  - description: Dev
+    url: 'http://localhost:5000/api/v1'
+tags:
+  - name: Auth
+    description: Authentication Endpoints(Public + Private)
+  - name: User
+    description: User Endpoints(Private)
+  - name: Attendance
+    description: Attendance Endpoints(Private)
+  - name: SalaryReport
+    description: Salary Report Endpoints(Private)
+paths:
+  '/auth/register':
+    post:
+      description: create a new account
+      tags: [Auth]
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Rafiur Rahman Protik
+                email:
+                  type: string
+                  format: email
+                  example: rafiurprotik111@example.com
+                password:
+                  type: string
+                  format: password
+                  example: PassWord123
+              required: [name, email, password]
+      responses:
+        '201':
+          description: Signup successful
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 201
+                  message:
+                    type: string
+                    example: Signup successful
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/auth/signup'
+                      signin:
+                        type: string
+                        example: '/auth/signin'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          '$ref': '#/components/responses/500'
+  '/auth/login':
+    post:
+      description: Login to your account
+      tags: [Auth]
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: rafiurprotik@example.com
+                password:
+                  type: string
+                  format: password
+                  example: PassWord123
+              required: [email, password]
+      responses:
+        '200':
+          description: Signin successul
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Signin successful
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: '/auth/signin'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          '$ref': '#/components/responses/500'
+  '/user/create-user':
+    # get:
+    #   security:
+    #     - bearerAuth: []
+    #   tags: [User]
+    #   description: Create
+    #   parameters:
+    #     - $ref: '#/components/parameters/pageParam'
+    #     - $ref: '#/components/parameters/limitParam'
+    #     - $ref: '#/components/parameters/sortTypeParam'
+    #     - $ref: '#/components/parameters/sortByParam'
+    #     - in: query
+    #       name: name
+    #       description: Name of the user
+    #       schema:
+    #         type: string
+    #         example: Ali Akkas
+    #     - in: query
+    #       name: email
+    #       description: Email of the user
+    #       schema:
+    #         type: string
+    #         example: aliakkas006@gmail.com
+    #   responses:
+    #     '200':
+    #       description: Return a list of users
+    #       content:
+    #         'application/json':
+    #           schema:
+    #             type: object
+    #             properties:
+    #               data:
+    #                 type: array
+    #                 items:
+    #                   allOf:
+    #                       - type: object
+    #                       properties:
+    #                         id:
+    #                           type: integer
+    #                           format: int32
+    #                           example: 1
+    #                         name:
+    #                           type: string
+    #                           example: user_1
+    #                         email:
+    #                           type: string
+    #                           example: user@gmail.com
+    #                       required: [id, name, email]
+    #                     - $ref: '#/components/schemas/Timestamp'
+    #               pagination:
+    #                 $ref: '#/components/schemas/Pagination'
+    #               links:
+    #                 type: object
+    #                 properties:
+    #                   self:
+    #                     type: string
+    #                     format: url
+    #                     example: '/users?page=2&limit=10'
+    #                   next:
+    #                     type: string
+    #                     format: url
+    #                     example: '/users?page=3&limit=10'
+    #                   prev:
+    #                     type: string
+    #                     format: url
+    #                     example: '/users?page=1&limit=10'
+    #     '400':
+    #       $ref: '#/components/responses/400'
+    #     '500':
+    #       $ref: '#/components/responses/500'
+    post:
+      operationId: createUser
+      security:
+        - bearerAuth: []
+      tags: [User]
+      description: Create a new user - [By Admin]
+      requestBody:
+        description: To create a new user admin must need to provide valid data
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  format: email
+                  example: example@gmail.com
+                password:
+                  type: string
+                  format: password
+                  example: User123@
+                role:
+                  type: string
+                  enum:
+                    - user
+                    - admin
+                  example: user
+                status:
+                  type: string
+                  enum:
+                    - pending
+                    - approved
+                    - block
+                    - decline
+                  example: pending
+              required: [name, email, password]
+      responses:
+        '201':
+          description: Successfully created a new user
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/UserCreateDTO'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  '/user/approve/{id}':
+    get:
+      tags: [User]
+      description: Approve a user by Admin
+      parameters:
+        - $ref: '#/components/parameters/idPathParam'
+        
+      responses:
+        '200':
+          description: 'Approved successfully'
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 200
+                  message:
+                    type: string
+                    example: Approved successfully
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+  '/attendance/create':
+    post:
+      tags: [Attendance]
+      description: Create an attendance
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  example: 2023-09-20T12:34:56.789Z
+                title:
+                  type: string
+                  example: Day-1 Sunday
+              required: [date]
+      responses:
+        '201':
+          description: Attendance created successfully
+          content:
+            'application/json':
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        example: 201
+                      message:
+                        type: string
+                        example: Attendance created successfully
+                      data:
+                        type: object
+                        properties:
+                          isOff:
+                            type: boolean
+                            example: true
+                          message:
+                            type: string
+                          event:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                format: int32
+                                example: 1
+                              title:
+                                type: string
+                                example: Day 1 - Sunday
+                              startTime:
+                                type: string
+                                example: 2023-09-20T12:34:56.789Z
+                  - $ref: '#/components/schemas/Timestamp'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          '$ref': '#/components/responses/500'
+  '/attendance/stop/{id}':
+    patch:
+      tags: [Attendance]
+      description: Stop the running attendance
+      parameters:
+        - $ref: '#/components/parameters/idPathParam'
+        
+      responses:
+        '200':
+          description: 'Stopped successfully'
+          content:
+            'application/json':
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      code:
+                        type: integer
+                        format: int32
+                        example: 201
+                      message:
+                        type: string
+                        example: Attendance stopped successfully
+                      data:
+                        type: object
+                        properties:
+                          isOff:
+                            type: boolean
+                            example: true
+                          message:
+                            type: string
+                          event:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  format: int32
+                                  example: 1
+                                title:
+                                  type: string
+                                  example: Day 1 - Sunday
+                                startTime:
+                                  type: string
+                                  example: 2023-09-20T12:34:56.789Z
+                                endTime:
+                                  type: string
+                                  example: 2023-09-20T12:34:56.789Z
+                  - $ref: '#/components/schemas/Timestamp'
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+              example: 1
+            name:
+              type: string
+              example: Ali Akkas
+            email:
+              type: string
+              format: email
+              example: akkas@gmail.com
+            role:
+              type: string
+              enum:
+                - user
+                - admin
+              example: user
+            status:
+              type: string
+              enum:
+                - pending
+                - approved
+                - block
+                - decline
+              example: pending
+          required: [id, name, email, status]
+        - $ref: '#/components/schemas/Timestamp'
+    UserCreateDTO:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          example: 201
+        message:
+          type: string
+          example: 'User created successfully'
+        data:
+          $ref: '#/components/schemas/User'
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              format: url
+              example: '/articles/1'
+            edit:
+              type: string
+              format: url
+              example: '/users/1/edit'
+            delete:
+              type: string
+              format: url
+              example: '/users/1/delete'
+            view:
+              type: string
+              format: url
+              example: '/users/1/view'
+    Timestamp:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required: [createdAt, updatedAt]
+  responses:
+    '500':
+      description: 'Internal Server Error'
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 500
+              error:
+                type: string
+                example: Internal Server Error
+              message:
+                type: string
+                example: We are sorry for the inconvenience. Please try again later
+    '400':
+      description: 'Bad Request'
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 400
+              error:
+                type: string
+                example: Bad Request
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                      example: email
+                    message:
+                      type: string
+                      example: Invalid email
+                    in:
+                      type: string
+                      enum: [query, body]
+                      example: body
+    '401':
+      description: Unauthorized
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 401
+              error:
+                type: string
+                example: Unauthorized
+              message:
+                type: string
+                example: You don't have the right permissions
+    '404':
+      description: Resource Not Found
+      content:
+        'application/json':
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+                example: 404
+              error:
+                type: string
+                example: Not Found
+              message:
+                type: string
+                example: Requested resource not found
+  parameters:
+    pageParam:
+      in: query
+      name: page
+      description: current page number
+      required: true
+      schema:
+        type: integer
+        format: int32
+        example: 2
+    limitParam:
+      in: query
+      name: limit
+      description: maximum items to be returned
+      required: true
+      schema:
+        type: integer
+        format: int32
+        example: 10
+    sortTypeParam:
+      in: query
+      name: sort_type
+      description: type of sort (asc or dsc)
+      schema:
+        type: string
+        enum: [asc, dsc]
+        example: dsc
+    sortByParam:
+      in: query
+      name: sort_by
+      description: Sort key
+      schema:
+        type: string
+        example: updatedAt
+    searchParam:
+      in: query
+      name: search
+      description: Search term
+      schema:
+        type: string
+        example: title
+    idPathParam:
+      in: path
+      name: id
+      required: true
+      description: User Id
+      schema:
+        type: string
+        example: '64d268cdeef8c84bb18912db'
