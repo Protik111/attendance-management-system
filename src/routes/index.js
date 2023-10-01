@@ -8,4 +8,5 @@ router
   .post(`${API_Version}/auth/register`, authController.register)
   .post(`${API_Version}/auth/login`, authController.login);
 
+//User routes
 module.exports = router;
