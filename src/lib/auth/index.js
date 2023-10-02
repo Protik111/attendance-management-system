@@ -6,7 +6,7 @@ const { userExist, createUser, findUserByEmail } = require("../user");
 const register = async ({ name, email, password }) => {
   const hasUser = await userExist(email);
   if (hasUser) {
-    throw badRequest("User already exist");
+    throw badRequest("User already exists");
   }
 
   password = await generateHash(password);

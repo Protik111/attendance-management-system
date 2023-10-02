@@ -1,12 +1,19 @@
 const router = require("express").Router();
 const { controllers: authController } = require("../api/v1/auth");
+const { controllers: userController } = require("../api/v1/user");
+const authenticate = require("../middleware/authenticate");
 
-const API_Version = "/api/v1";
+const API_version1 = "/api/v1";
 
 //Auth routes
 router
-  .post(`${API_Version}/auth/register`, authController.register)
-  .post(`${API_Version}/auth/login`, authController.login);
+  .post(`${API_version1}/auth/register`, authController.register)
+  .post(`${API_version1}/auth/login`, authController.login);
 
 //User routes
+router.post(
+  `${API_version1}/user/create-user`,
+  authenticate,
+  userController.create
+);
 module.exports = router;

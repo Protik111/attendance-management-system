@@ -44,6 +44,12 @@ const create = async ({
 }) => {
   if (!name || !email || !password) throw badRequest("Invalid parameters");
 
+  const hasUser = await userExist(email);
+
+  if (hasUser) {
+    throw badRequest("User already exists");
+  }
+
   const user = new User({ name, email, password, role, status });
   await user.save();
 

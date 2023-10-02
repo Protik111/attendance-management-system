@@ -1,18 +1,15 @@
 openapi: 3.0.0
 info:
-  version: '1'
-  title: 'Employee Attendance Management System'
-  description: 'This is a simple project where an employee will be able to do attendance. The main purpose of this project will be maintaining the employees’ attendances that includes daily attendance status, weekly status, salary report, etc.'
+  version: "1"
+  title: "Employee Attendance Management System"
+  description: "This is a simple project where an employee will be able to do attendance. The main purpose of this project will be maintaining the employees’ attendances that includes daily attendance status, weekly status, salary report, etc."
   contact:
     name: Rafiur Rahman Protik
     url: https://protikdev.vercel.app/
     email: rafiurprotik111@gmail.com
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RAFIURPROTIK111/Employee-attendance-management-system/1
   - description: Dev
-    url: 'http://localhost:5000/api/v1'
+    url: "http://localhost:5000/api/v1"
 tags:
   - name: Auth
     description: Authentication Endpoints(Public + Private)
@@ -23,13 +20,13 @@ tags:
   - name: SalaryReport
     description: Salary Report Endpoints(Private)
 paths:
-  '/auth/register':
+  "/auth/register":
     post:
       description: create a new account
       tags: [Auth]
       requestBody:
         content:
-          'application/json':
+          "application/json":
             schema:
               type: object
               properties:
@@ -46,10 +43,10 @@ paths:
                   example: PassWord123
               required: [name, email, password]
       responses:
-        '201':
+        "201":
           description: Signup successful
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: object
                 properties:
@@ -65,27 +62,27 @@ paths:
                     properties:
                       access_token:
                         type: string
-                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
                   links:
                     type: object
                     properties:
                       self:
                         type: string
-                        example: '/auth/signup'
+                        example: "/auth/signup"
                       signin:
                         type: string
-                        example: '/auth/signin'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          '$ref': '#/components/responses/500'
-  '/auth/login':
+                        example: "/auth/signin"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+  "/auth/login":
     post:
       description: Login to your account
       tags: [Auth]
       requestBody:
         content:
-          'application/json':
+          "application/json":
             schema:
               type: object
               properties:
@@ -99,10 +96,10 @@ paths:
                   example: PassWord123
               required: [email, password]
       responses:
-        '200':
+        "200":
           description: Signin successul
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: object
                 properties:
@@ -118,18 +115,18 @@ paths:
                     properties:
                       access_token:
                         type: string
-                        example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
+                        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
                   links:
                     type: object
                     properties:
                       self:
                         type: string
-                        example: '/auth/signin'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          '$ref': '#/components/responses/500'
-  '/user/create-user':
+                        example: "/auth/signin"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+  "/user/create-user":
     # get:
     #   security:
     #     - bearerAuth: []
@@ -208,7 +205,7 @@ paths:
       requestBody:
         description: To create a new user admin must need to provide valid data
         content:
-          'application/json':
+          "application/json":
             schema:
               type: object
               properties:
@@ -239,30 +236,30 @@ paths:
                   example: pending
               required: [name, email, password]
       responses:
-        '201':
+        "201":
           description: Successfully created a new user
           content:
-            'application/json':
+            "application/json":
               schema:
-                $ref: '#/components/schemas/UserCreateDTO'
-        '400':
-          $ref: '#/components/responses/400'
-        '401':
-          $ref: '#/components/responses/401'
-        '500':
-          $ref: '#/components/responses/500'
-  '/user/approve/{id}':
+                $ref: "#/components/schemas/UserCreateDTO"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
+  "/user/approve/{id}":
     get:
       tags: [User]
       description: Approve a user by Admin
       parameters:
-        - $ref: '#/components/parameters/idPathParam'
-        
+        - $ref: "#/components/parameters/idPathParam"
+
       responses:
-        '200':
-          description: 'Approved successfully'
+        "200":
+          description: "Approved successfully"
           content:
-            'application/json':
+            "application/json":
               schema:
                 type: object
                 properties:
@@ -273,19 +270,19 @@ paths:
                   message:
                     type: string
                     example: Approved successfully
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
-  '/attendance/create':
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+  "/attendance/create":
     post:
       tags: [Attendance]
       description: Create an attendance
       requestBody:
         content:
-          'application/json':
+          "application/json":
             schema:
               type: object
               properties:
@@ -297,10 +294,10 @@ paths:
                   example: Day-1 Sunday
               required: [date]
       responses:
-        '201':
+        "201":
           description: Attendance created successfully
           content:
-            'application/json':
+            "application/json":
               schema:
                 allOf:
                   - type: object
@@ -333,23 +330,23 @@ paths:
                               startTime:
                                 type: string
                                 example: 2023-09-20T12:34:56.789Z
-                  - $ref: '#/components/schemas/Timestamp'
-        '400':
-          $ref: '#/components/responses/400'
-        '500':
-          '$ref': '#/components/responses/500'
-  '/attendance/stop/{id}':
+                  - $ref: "#/components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "500":
+          "$ref": "#/components/responses/500"
+  "/attendance/stop/{id}":
     patch:
       tags: [Attendance]
       description: Stop the running attendance
       parameters:
-        - $ref: '#/components/parameters/idPathParam'
-        
+        - $ref: "#/components/parameters/idPathParam"
+
       responses:
-        '200':
-          description: 'Stopped successfully'
+        "200":
+          description: "Stopped successfully"
           content:
-            'application/json':
+            "application/json":
               schema:
                 allOf:
                   - type: object
@@ -370,28 +367,28 @@ paths:
                           message:
                             type: string
                           event:
-                              type: object
-                              properties:
-                                id:
-                                  type: integer
-                                  format: int32
-                                  example: 1
-                                title:
-                                  type: string
-                                  example: Day 1 - Sunday
-                                startTime:
-                                  type: string
-                                  example: 2023-09-20T12:34:56.789Z
-                                endTime:
-                                  type: string
-                                  example: 2023-09-20T12:34:56.789Z
-                  - $ref: '#/components/schemas/Timestamp'
-        '400':
-          $ref: '#/components/responses/400'
-        '404':
-          $ref: '#/components/responses/404'
-        '500':
-          $ref: '#/components/responses/500'
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                format: int32
+                                example: 1
+                              title:
+                                type: string
+                                example: Day 1 - Sunday
+                              startTime:
+                                type: string
+                                example: 2023-09-20T12:34:56.789Z
+                              endTime:
+                                type: string
+                                example: 2023-09-20T12:34:56.789Z
+                  - $ref: "#/components/schemas/Timestamp"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 components:
   securitySchemes:
     bearerAuth:
@@ -429,7 +426,7 @@ components:
                 - decline
               example: pending
           required: [id, name, email, status]
-        - $ref: '#/components/schemas/Timestamp'
+        - $ref: "#/components/schemas/Timestamp"
     UserCreateDTO:
       type: object
       properties:
@@ -439,28 +436,28 @@ components:
           example: 201
         message:
           type: string
-          example: 'User created successfully'
+          example: "User created successfully"
         data:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
         links:
           type: object
           properties:
             self:
               type: string
               format: url
-              example: '/articles/1'
+              example: "/articles/1"
             edit:
               type: string
               format: url
-              example: '/users/1/edit'
+              example: "/users/1/edit"
             delete:
               type: string
               format: url
-              example: '/users/1/delete'
+              example: "/users/1/delete"
             view:
               type: string
               format: url
-              example: '/users/1/view'
+              example: "/users/1/view"
     Timestamp:
       type: object
       properties:
@@ -472,10 +469,10 @@ components:
           format: date-time
       required: [createdAt, updatedAt]
   responses:
-    '500':
-      description: 'Internal Server Error'
+    "500":
+      description: "Internal Server Error"
       content:
-        'application/json':
+        "application/json":
           schema:
             type: object
             properties:
@@ -489,10 +486,10 @@ components:
               message:
                 type: string
                 example: We are sorry for the inconvenience. Please try again later
-    '400':
-      description: 'Bad Request'
+    "400":
+      description: "Bad Request"
       content:
-        'application/json':
+        "application/json":
           schema:
             type: object
             properties:
@@ -518,10 +515,10 @@ components:
                       type: string
                       enum: [query, body]
                       example: body
-    '401':
+    "401":
       description: Unauthorized
       content:
-        'application/json':
+        "application/json":
           schema:
             type: object
             properties:
@@ -535,10 +532,10 @@ components:
               message:
                 type: string
                 example: You don't have the right permissions
-    '404':
+    "404":
       description: Resource Not Found
       content:
-        'application/json':
+        "application/json":
           schema:
             type: object
             properties:
@@ -600,4 +597,4 @@ components:
       description: User Id
       schema:
         type: string
-        example: '64d268cdeef8c84bb18912db'
+        example: "64d268cdeef8c84bb18912db"
