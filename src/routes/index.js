@@ -12,10 +12,7 @@ router
   .post(`${API_version1}/auth/login`, authController.login);
 
 //User routes
-router.post(
-  `${API_version1}/user/create-user`,
-  authenticate,
-  authorize(["admin"]),
-  userController.create
-);
+router
+  .post(`${API_version1}/user/create-user`, authenticate, authorize(["admin"]), userController.create)
+  .patch(`${API_version1}/user/approve/:id`, authenticate, authenticate(["admin"]), userController.approve)
 module.exports = router;

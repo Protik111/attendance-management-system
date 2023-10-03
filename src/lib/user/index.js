@@ -1,5 +1,5 @@
 const User = require("../../model/User");
-const { badRequest } = require("../../utils/error");
+const { badRequest, notFound } = require("../../utils/error");
 
 const findUserByEmail = async (email) => {
   const user = await User.findOne({ email });
@@ -56,9 +56,30 @@ const create = async ({
   return { ...user._doc, id: user.id };
 };
 
+const approve = async ({
+  id
+}) => {
+  if (!id) {
+    throw badRequest("Invalid parameters!")
+  }
+  const user = await User.findById(id)
+
+  if (!user) {
+    throw notFound("User not found!")
+  }
+
+  user.status = "approved";
+
+  await user.save();
+
+  return { ...user._doc, id: user.id }
+
+}
+
 module.exports = {
   findUserByEmail,
   userExist,
   createUser,
   create,
+  approve
 };
