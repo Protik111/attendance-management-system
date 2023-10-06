@@ -13,6 +13,16 @@ router
 
 //User routes
 router
-  .post(`${API_version1}/user/create-user`, authenticate, authorize(["admin"]), userController.create)
-  .patch(`${API_version1}/user/approve/:id`, authenticate, authenticate(["admin"]), userController.approve)
+  .post(
+    `${API_version1}/user/create-user`,
+    authenticate,
+    authorize(["admin"]),
+    userController.create
+  )
+  .patch(
+    `${API_version1}/user/approve/:id`,
+    authenticate,
+    authorize(["admin"]),
+    userController.approve
+  );
 module.exports = router;

@@ -56,30 +56,27 @@ const create = async ({
   return { ...user._doc, id: user.id };
 };
 
-const approve = async ({
-  id
-}) => {
+const approve = async ({ id }) => {
   if (!id) {
-    throw badRequest("Invalid parameters!")
+    throw badRequest("Invalid parameters!");
   }
-  const user = await User.findById(id)
+  const user = await User.findById(id);
 
   if (!user) {
-    throw notFound("User not found!")
+    throw notFound("User not found!");
   }
 
   user.status = "approved";
 
   await user.save();
 
-  return { ...user._doc, id: user.id }
-
-}
+  return { ...user._doc, id: user.id };
+};
 
 module.exports = {
   findUserByEmail,
   userExist,
   createUser,
   create,
-  approve
+  approve,
 };

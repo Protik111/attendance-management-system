@@ -249,7 +249,9 @@ paths:
         "500":
           $ref: "#/components/responses/500"
   "/user/approve/{id}":
-    get:
+    patch:
+      security:
+        - bearerAuth: []
       tags: [User]
       description: Approve a user by Admin
       parameters:
