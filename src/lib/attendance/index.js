@@ -1,18 +1,35 @@
 const Attendance = require("../../model/Attendance");
 const { badRequest } = require("../../utils/error");
 
-const createAttendance = async ({ date, event }) => {
+const hasStarted = async (date) => {
+  const event = await Attendance.findOne({ date: date });
+  return event ? event : null;
+};
+
+const createAttendance = async ({ date, event, user }) => {
   if (!date || !event) {
     throw badRequest("Invalid parameters");
   }
 
-  const newEvents = { ...event };
+  const startedForToday = await hasStarted(date);
 
-  const attendance = new Attendance({ date, events: newEvents });
+  if (startedForToday) {
+    startedForToday.events.push(event);
+    await startedForToday.save();
 
-  await attendance.save();
+    return { ...startedForToday._doc, id: startedForToday.id };
+  } else {
+    const newEvents = { ...event };
+    const payload = {
+      date,
+      events: newEvents,
+      user,
+    };
+    const attendance = new Attendance(payload);
+    await attendance.save();
 
-  return { ...attendance._doc, id: attendance.id };
+    return { ...attendance._doc, id: attendance.id };
+  }
 };
 
 module.exports = {

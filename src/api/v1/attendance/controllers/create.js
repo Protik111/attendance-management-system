@@ -7,6 +7,7 @@ const create = async (req, res, next) => {
     const attendance = await attendanceService.createAttendance({
       date,
       event,
+      user: req.user.id,
     });
 
     const response = {

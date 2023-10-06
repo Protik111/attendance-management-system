@@ -33,7 +33,7 @@ const attendanceModel = new Schema(
       default: false,
     },
     user: {
-      type: Schema.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
   },
