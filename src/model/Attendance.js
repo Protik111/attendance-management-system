@@ -18,6 +18,13 @@ const attendanceModel = new Schema(
           type: Date,
           required: true,
         },
+        endTime: {
+          type: Date,
+        },
+        isStopped: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     isOff: {

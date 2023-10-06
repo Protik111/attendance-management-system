@@ -6,6 +6,12 @@ const hasStarted = async (date) => {
   return event ? event : null;
 };
 
+const findEvent = async (id) => {
+  const event = await Attendance.find({ "events._id": id });
+  return event;
+};
+
+//create attendance for day and resume with event
 const createAttendance = async ({ date, event, user }) => {
   if (!date || !event) {
     throw badRequest("Invalid parameters");
@@ -32,6 +38,32 @@ const createAttendance = async ({ date, event, user }) => {
   }
 };
 
+const stopAttendance = async ({ id }) => {
+  if (!id) {
+    throw badRequest("Invalid parameters!");
+  }
+  const event = await findEvent(id);
+
+  if (!event) {
+    badRequest("Attendance not found!");
+  }
+
+  const updatedEvent = await Attendance.findOneAndUpdate(
+    { _id: event._id },
+    // { $set: { "data.events.$[elem].isStopped": true } },
+    {
+      $set: {
+        // "data.events.$[elem].title": "Updated Title",
+        "events.$[inner].isStopped.": true,
+      },
+    },
+    { new: true }
+  );
+
+  console.log("event", updatedEvent);
+};
+
 module.exports = {
   createAttendance,
+  stopAttendance,
 };
