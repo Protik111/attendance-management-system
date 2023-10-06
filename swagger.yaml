@@ -280,6 +280,8 @@ paths:
           $ref: "#/components/responses/500"
   "/attendance/create":
     post:
+      security:
+        - bearerAuth: []
       tags: [Attendance]
       description: Create an attendance
       requestBody:
@@ -291,9 +293,15 @@ paths:
                 date:
                   type: string
                   example: 2023-09-20T12:34:56.789Z
-                title:
-                  type: string
-                  example: Day-1 Sunday
+                event:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Day-1 Sunday
+                    startTime:
+                      type: string
+                      example: 2023-09-20T12:34:56.789Z
               required: [date]
       responses:
         "201":

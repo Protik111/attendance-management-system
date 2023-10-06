@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { controllers: authController } = require("../api/v1/auth");
 const { controllers: userController } = require("../api/v1/user");
+const { controllers: attendanceController } = require("../api/v1/attendance");
 const authenticate = require("../middleware/authenticate");
 const authorize = require("../middleware/authorize");
 
@@ -25,4 +26,11 @@ router
     authorize(["admin"]),
     userController.approve
   );
+
+//Attendance route
+router.post(
+  `${API_version1}/attendance/create`,
+  authenticate,
+  attendanceController.create
+);
 module.exports = router;

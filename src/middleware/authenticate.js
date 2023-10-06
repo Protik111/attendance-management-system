@@ -3,7 +3,11 @@ const userService = require("../lib/user");
 const { authenticationError } = require("../utils/error");
 
 const authenticate = async (req, _res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    next(authenticationError());
+  }
 
   try {
     const decoded = tokenService.decodeToken({ token });
