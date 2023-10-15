@@ -347,10 +347,12 @@ paths:
           "$ref": "#/components/responses/500"
   "/attendance/stop/{id}":
     patch:
+      security:
+        - bearerAuth: []
       tags: [Attendance]
       description: Stop the running attendance
       parameters:
-        - $ref: "#/components/parameters/idPathParam"
+        - $ref: "#/components/parameters/idPathParamAttendanceEvent"
 
       responses:
         "200":
@@ -605,6 +607,14 @@ components:
       name: id
       required: true
       description: User Id
+      schema:
+        type: string
+        example: "64d268cdeef8c84bb18912db"
+    idPathParamAttendanceEvent:
+      in: path
+      name: id
+      required: true
+      description: Attendance Event Id
       schema:
         type: string
         example: "64d268cdeef8c84bb18912db"

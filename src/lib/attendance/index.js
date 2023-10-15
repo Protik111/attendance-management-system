@@ -7,8 +7,20 @@ const hasStarted = async (date) => {
 };
 
 const findEvent = async (id) => {
-  const event = await Attendance.find({ "events._id": id });
+  const event = await Attendance.findOne({ "events._id": id });
+
   return event;
+
+  // if (event && event.events && event.events.length > 0) {
+  //   const desiredObject = event.events.find((event) => event._id == id);
+  //   if (desiredObject) {
+  //     return desiredObject;
+  //   } else {
+  //     console.log("Object not found.");
+  //   }
+  // } else {
+  //   console.log("Object not found.");
+  // }
 };
 
 //create attendance for day and resume with event
@@ -48,19 +60,24 @@ const stopAttendance = async ({ id }) => {
     badRequest("Attendance not found!");
   }
 
-  const updatedEvent = await Attendance.findOneAndUpdate(
-    { _id: event._id },
-    // { $set: { "data.events.$[elem].isStopped": true } },
-    {
-      $set: {
-        // "data.events.$[elem].title": "Updated Title",
-        "events.$[inner].isStopped.": true,
-      },
-    },
-    { new: true }
-  );
+  // console.log("event", event);
 
-  console.log("event", updatedEvent);
+  const date = new Date();
+
+  if (event && event.events && event.events.length > 0) {
+    const desiredObject = event.events.find((event) => event._id == id);
+    if (desiredObject) {
+      // return desiredObject;
+      desiredObject.isStopped = true;
+      desiredObject.endTime = date.toISOString();
+    } else {
+      badRequest("Event not found!");
+    }
+  }
+
+  await event.save();
+
+  return { ...event._doc, id: event.id };
 };
 
 module.exports = {
