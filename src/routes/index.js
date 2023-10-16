@@ -29,14 +29,20 @@ router
 
 //Attendance route
 router
-  .post(
-    `${API_version1}/attendance/create`,
-    authenticate,
-    attendanceController.create
-  )
+  // .post(
+  //   `${API_version1}/attendance/create`,
+  //   authenticate,
+  //   attendanceController.create
+  // )
   .patch(
     `${API_version1}/attendance/stop/:id`,
     authenticate,
     attendanceController.stop
+  )
+  .post(
+    `${API_version1}/attendance/off`,
+    authenticate,
+    attendanceController.dayOff
   );
+
 module.exports = router;

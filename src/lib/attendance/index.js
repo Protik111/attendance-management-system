@@ -1,5 +1,6 @@
 const Attendance = require("../../model/Attendance");
 const { badRequest } = require("../../utils/error");
+const { getDayName } = require("../../utils/getDay");
 
 const hasStarted = async (date) => {
   const event = await Attendance.findOne({ date: date });
@@ -50,6 +51,7 @@ const createAttendance = async ({ date, event, user }) => {
   }
 };
 
+//stop attedance for specific event
 const stopAttendance = async ({ id }) => {
   if (!id) {
     throw badRequest("Invalid parameters!");
@@ -80,7 +82,24 @@ const stopAttendance = async ({ id }) => {
   return { ...event._doc, id: event.id };
 };
 
+//make attendance as day off
+const makeDayAsOff = async ({ date, user }) => {
+  //creating a event title
+  const today = new Date();
+  const title = `${getDayName(today.getDay())} marked as Off day.`;
+
+  //creating an attendance first
+  const attendance = await createAttendance({
+    date,
+    evnt: title || "",
+    user,
+  });
+
+  console.log("attendance", attendance);
+};
+
 module.exports = {
   createAttendance,
   stopAttendance,
+  makeDayAsOff,
 };
