@@ -1,6 +1,7 @@
 const Attendance = require("../../model/Attendance");
 const { badRequest } = require("../../utils/error");
 const { getDayName } = require("../../utils/getDay");
+const defaults = require("../../config/default");
 
 const hasStarted = async (date) => {
   const event = await Attendance.findOne({ date: date });
@@ -98,8 +99,57 @@ const makeDayAsOff = async ({ date, user }) => {
   console.log("attendance", attendance);
 };
 
+/**
+ * Find all attendances
+ * Pagination
+ * Searching
+ * Sorting
+ * @param{*} param0
+ * @returns
+ */
+//view attendance by week and month
+const viewAttendance = async ({
+  page = defaults.page,
+  limit = defaults.limit,
+  sortType = defaults.sortType,
+  sortBy = defaults.sortBy,
+  search = defaults.search,
+  sortParam = defaults.sortParam,
+}) => {
+  const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
+
+  const filter = {
+    title: { $regex: search, $option: "i" },
+  };
+
+  const attendances = await Attendance.find(filter)
+    .sort(sortStr)
+    .skip(limit * page - limit)
+    .limit(limit);
+
+  return attendances.map((attendance) => ({
+    ...attendance._doc,
+    id: attendance.id,
+  }));
+};
+
+/**
+ * Count all attendance
+ * @param {*} param0
+ * @returns
+ */
+const count = ({ search = "" }) => {
+  const filter = {
+    title: { $regex: search, $options: "i" },
+  };
+
+  return Attendance.count(filter);
+};
+
 module.exports = {
   createAttendance,
   stopAttendance,
   makeDayAsOff,
+  viewAttendance,
+  count,
 };
