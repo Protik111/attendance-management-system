@@ -113,16 +113,22 @@ const viewAttendance = async ({
   limit = defaults.limit,
   sortType = defaults.sortType,
   sortBy = defaults.sortBy,
-  search = defaults.search,
+  searchByDate = defaults.searchByDate,
   sortParam = defaults.sortParam,
 }) => {
   const sortStr = `${sortType === "dsc" ? "-" : ""}${sortBy}`;
 
-  const filter = {
-    title: { $regex: search, $option: "i" },
-  };
+  // const filter = {
+  //   title: { $regex: search, $option: "i" },
+  // };
 
-  const attendances = await Attendance.find(filter)
+  console.log("searchByDate", searchByDate);
+
+  const dateToFind = { date: new Date(searchByDate()) };
+  console.log("dateToFind", dateToFind);
+  // "2023-09-20T12:34:56.789+00:00"
+
+  const attendances = await Attendance.find()
     .sort(sortStr)
     .skip(limit * page - limit)
     .limit(limit);

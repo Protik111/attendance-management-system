@@ -4,7 +4,7 @@ const config = {
   page: 1,
   sortType: "dsc",
   sortBy: "updatedAt",
-  search: "",
+  searchByDate: "",
   sortParam: "week",
 };
 

@@ -6,7 +6,7 @@ const viewAttendance = async (req, res, next) => {
   const limit = req.query.limit || defaults.limit;
   const sortType = req.query.sort_type || defaults.sortType;
   const sortBy = req.query.sort_by || defaults.sortBy;
-  const search = req.query.search || defaults.search;
+  const searchByDate = req.query.searchByDate || defaults.searchByDate;
   const sortParam = req.query.search || defaults.sortParam;
 
   try {
@@ -15,7 +15,7 @@ const viewAttendance = async (req, res, next) => {
       limit,
       sortType,
       sortBy,
-      search,
+      searchByDate,
       sortParam,
     });
 
@@ -27,6 +27,7 @@ const viewAttendance = async (req, res, next) => {
 
     res.status(200).json(response);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

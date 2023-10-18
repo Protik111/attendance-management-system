@@ -14,6 +14,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use((err, _req, res, next) => {
+  console.log("ge");
   res.status(err.status || 500).json({
     message: err.message,
     errors: err.errors,

@@ -28,8 +28,11 @@ router
   );
 
 //Attendance route
+/**
+ * @todo: Add base URL version in /attendances route
+ */
 router
-  .get(`${API_version1}/attendance`, authenticate, attendanceController.view)
+  .get(`/attendances`, authenticate, attendanceController.view)
   .post(
     `${API_version1}/attendance/create`,
     authenticate,
