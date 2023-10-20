@@ -125,7 +125,46 @@ const viewAttendance = async ({
   // const dateToFind = { date: new Date(searchByDate) };
   // "2023-09-20T12:34:56.789+00:00"
 
-  const attendances = await Attendance.find({ date: searchByDate })
+  /**
+   * This filter is for finding the attendances by date, lastWeek, lastMonth and then month name
+   */
+  const filter = {};
+  if (searchByDate) {
+    filter.date = searchByDate;
+  } else if (searchByDate === "lastWeek") {
+    const lastWeekStartDate = new Date();
+    lastWeekStartDate.setDate(lastWeekStartDate.getDate() - 7);
+    filter.date = { $gte: lastWeekStartDate, $lte: new Date() };
+  } else if (searchByDate === "lastMonth") {
+    const lastMonthStartDate = new Date();
+    lastMonthStartDate.setMonth(lastMonthStartDate.getMonth() - 1);
+    const currentMonthEndDate = new Date();
+    currentMonthEndDate.setDate(0); // Sets the day to 0, which rolls back to the last day of the previous month
+    filter.date = { $gte: lastMonthStartDate, $lte: currentMonthEndDate };
+  } else if (
+    [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ].includes(sortParam)
+  ) {
+    // Filter by the month of the date
+    filter.date = {
+      $gte: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+      $lte: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0),
+    };
+  }
+
+  const attendances = await Attendance.find(filter)
     .sort(sortStr)
     .skip(limit * page - limit)
     .limit(limit);

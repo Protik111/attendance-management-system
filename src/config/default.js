@@ -5,7 +5,7 @@ const config = {
   sortType: "dsc",
   sortBy: "updatedAt",
   searchByDate: "",
-  sortParam: "week",
+  sortParam: "",
 };
 
 module.exports = Object.freeze(config);
