@@ -122,13 +122,10 @@ const viewAttendance = async ({
   //   title: { $regex: search, $option: "i" },
   // };
 
-  console.log("searchByDate", searchByDate);
-
-  const dateToFind = { date: new Date(searchByDate()) };
-  console.log("dateToFind", dateToFind);
+  // const dateToFind = { date: new Date(searchByDate) };
   // "2023-09-20T12:34:56.789+00:00"
 
-  const attendances = await Attendance.find()
+  const attendances = await Attendance.find({ date: searchByDate })
     .sort(sortStr)
     .skip(limit * page - limit)
     .limit(limit);
