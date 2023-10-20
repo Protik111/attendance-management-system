@@ -1,8 +1,15 @@
+const csv = require("csv-parser");
+const fs = require("fs");
 const Attendance = require("../../model/Attendance");
-const { badRequest } = require("../../utils/error");
+const { badRequest, serverError } = require("../../utils/error");
 const { getDayName } = require("../../utils/getDay");
 const defaults = require("../../config/default");
 
+/**
+ * This function checks is the attendance started or not
+ * @param {Date} date - date in each attendance
+ * @returns {Object} event -
+ */
 const hasStarted = async (date) => {
   const event = await Attendance.findOne({ date: date });
   return event ? event : null;
@@ -175,6 +182,75 @@ const viewAttendance = async ({
   }));
 };
 
+//update time
+const updatTime = async ({ id, date }) => {
+  if (!id) {
+    throw badRequest("Invalid parameters!");
+  }
+
+  const attendance = await Attendance.findById(id);
+  if (!attendance) {
+    throw badRequest("Attendance not found.");
+  }
+
+  attendance.date = date;
+
+  await attendance.save();
+
+  return { ...attendance._doc, id: attendance.id };
+};
+
+//delete attendance
+const deleteAttendance = async ({ id }) => {
+  if (!id) {
+    throw badRequest("Invalid parameters!");
+  }
+
+  const attendance = await Attendance.findByIdAndDelete(id);
+  if (!attendance) {
+    throw badRequest("Attendance not found.");
+  }
+};
+
+//bulk update with csv
+const bulkUpdate = async ({ file }) => {
+  if (!file) {
+    throw badRequest("No file uploaded.");
+  }
+
+  const results = [];
+  fs.createReadStream(file.path)
+    .pipe(csv())
+    .on("data", (data) => results.push(data))
+    .on("end", async () => {
+      try {
+        for (let row of results) {
+          const filter = {};
+          if (row.id) {
+            filter._id = row.id;
+          }
+          if (row.dateToFind) {
+            filter.date = row.dateToFind;
+          }
+
+          const update = {
+            $set: {
+              // Update specific fields with data from the CSV row
+              date: row.date,
+              // Add more fields to update as needed
+            },
+          };
+
+          const attendances = await Attendance.updateOne(filter, update);
+          console.log("attendances", attendances);
+        }
+      } catch (error) {
+        console.log("err", error);
+        throw serverError("Server error occurred.");
+      }
+    });
+};
+
 /**
  * Count all attendance
  * @param {*} param0
@@ -194,4 +270,7 @@ module.exports = {
   makeDayAsOff,
   viewAttendance,
   count,
+  updatTime,
+  deleteAttendance,
+  bulkUpdate,
 };

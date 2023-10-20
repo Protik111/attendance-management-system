@@ -8,6 +8,7 @@ const swaggerDoc = YAML.load("./swagger.yaml");
 const applyMiddleware = (app) => {
   app.use(express.json());
   app.use(morgan("dev"));
+  app.use(express.urlencoded({ extended: true }));
   app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDoc));
   app.use(
     OpenApiValidator.middleware({
